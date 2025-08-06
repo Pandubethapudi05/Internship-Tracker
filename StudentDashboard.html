@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #111827;
+      color: #fff;
+    }
+
+    header {
+      background: #1f2937;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #00c6ff;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 20px;
+      padding: 30px;
+    }
+
+    .card {
+      background: #1f2937;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #00c6ff;
+      margin-bottom: 15px;
+    }
+
+    .profile h3 {
+      margin: 10px 0 5px;
+    }
+
+    .section-title {
+      margin-bottom: 15px;
+      font-size: 18px;
+      color: #00f5a0;
+    }
+
+    .item {
+      background: #374151;
+      border-left: 5px solid #00c6ff;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+    }
+    .profile-pic-container {
+  position: relative;
+  width: 100px;
+  margin: 0 auto;
+}
+
+.profile-btns {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.profile-pic-container:hover .profile-btns {
+  opacity: 1;
+}
+
+.profile-btns button {
+  background: rgba(0, 198, 255, 0.9);
+  color: white;
+  font-size: 12px;
+  border: none;
+  margin: 2px 0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.profile-btns button:hover {
+  background: #00f5a0;
+}
+
+/* Edit Profile button */
+.edit-profile-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background: linear-gradient(to right, #0072ff, #00c6ff);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-profile-btn:hover {
+  background: linear-gradient(to right, #00f5a0, #00d9f5);
+}
+
+  </style>
+</head>
+
+<body>
+
+  <header>Student Dashboard</header>
+
+  <div class="dashboard">
+    
+   <!-- Profile -->
+<div class="card profile-card" style="position: relative;">
+  <div class="profile-pic-container">
+    <img src="E:\Files\my-react-app\src\assets\Dhruv.jpeg" class="profile-img" alt="Profile Image">
+    <div class="profile-btns">
+      <button onclick="alert('Viewing full photo...')">View Photo</button>
+      <button onclick="alert('Opening edit photo form...')">Edit Photo</button>
+    </div>
+  </div>
+  <h3 id="studentName"></h3>
+  <p class="label">Email:</p><p id="studentEmail"></p>
+  <p class="label">Department:</p><p id="studentDept"></p>
+  <p class="label">Year:</p><p id="studentYear">...</p>
+  <form id="resumeForm" enctype="multipart/form-data" style="margin-top: 15px;">
+    <label for="resumeUpload" style="display:block; margin-bottom:5px;">Upload Resume (PDF only)</label>
+    <input type="file" id="resumeUpload" name="resume" accept=".pdf" style="margin-bottom:10px; color: #000;">
+    <button type="submit" class="edit-profile-btn">Upload Resume</button>
+  </form>
+
+  <!-- Edit Profile Button -->
+  <button class="edit-profile-btn" onclick="alert('Edit profile clicked!')">Edit Profile</button>
+</div>
+
+
+    <!-- Projects & Internships -->
+    <div>
+      
+
+      <!-- Projects -->
+      <div class="card" style="margin-top: 20px;">
+        <div class="section-title">Projects</div>
+        <div class="item">
+          <strong>Title:</strong> Internship Tracker Portal  
+          <br><strong>Description:</strong> Web app to manage student internships  
+          <br><strong>Status:</strong> In Progress
+        </div>
+        <div class="item">
+          <strong>Title:</strong> Quiz Bot  
+          <br><strong>Description:</strong> Telegram bot to host AI-powered quizzes  
+          <br><strong>Status:</strong> Completed
+        </div>
+      </div>
+      <!-- Available Internships -->
+<div class="card" style="margin-top: 20px;">
+  <div class="section-title">Available Internships</div>
+
+  <div class="item">
+    <strong>Title:</strong> Frontend Developer  
+    <br><strong>Company:</strong> Microsoft  
+    <br><strong>Domain:</strong> Web Development  
+    <br>
+    <a href="https://careers.microsoft.com/students" target="_blank">
+      <button class="edit-profile-btn" style="margin-top:10px;" onclick="applyNow('pandu@example.com', 'Frontend Developer', 'Microsoft')">Apply Now</button>
+
+    </a>
+  </div>
+
+  <div class="item">
+    <strong>Title:</strong> Data Analyst Intern  
+    <br><strong>Company:</strong> TCS  
+    <br><strong>Domain:</strong> Data Science  
+    <br>
+    <a href="https://www.tcs.com/careers" target="_blank">
+      <button class="edit-profile-btn" style="margin-top:10px;" onclick="applyNow('pandu@example.com', 'Frontend Developer', 'Microsoft')">Apply Now</button>
+    </a>
+  </div>
+
+  <div class="item">
+    <strong>Title:</strong> AI/ML Intern  
+    <br><strong>Company:</strong> IBM  
+    <br><strong>Domain:</strong> Machine Learning  
+    <br>
+    <a href="https://www.ibm.com/employment/internships/" target="_blank">
+      <button class="edit-profile-btn" style="margin-top:10px;" onclick="applyNow('pandubethapudi05@gmail.com', 'Frontend Developer', 'Microsoft')">Apply Now</button>
+    </a>
+    
+  </div>
+</div>
+
+    </div>
+
+  </div>
+  <script>
+function applyNow(email, internshipTitle, company) {
+  fetch('apply.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      email: email,
+      title: internshipTitle,
+      company: company
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+  })
+  .catch(err => {
+    alert('Something went wrong: ' + err);
+  });
+}
+function loadProfile() {
+  const email = 'pandu@example.com'; // Replace with dynamic email if available via session/localStorage
+
+  fetch('get_profile.php?email=' + encodeURIComponent(email))
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        document.getElementById('studentName').textContent = data.name;
+        document.getElementById('studentEmail').textContent = data.email;
+        document.getElementById('studentDept').textContent = data.department;
+        document.getElementById('studentYear').textContent = data.year;
+
+        // Optional: Show download link if resume exists
+        if (data.resume_path) {
+          const resumeLink = document.createElement('a');
+          resumeLink.href = data.resume_path;
+          resumeLink.textContent = "Download Resume";
+          resumeLink.target = "_blank";
+          document.getElementById('resumeForm').appendChild(resumeLink);
+        }
+      }
+    })
+    .catch(err => {
+      alert('Failed to load profile: ' + err);
+    });
+}
+
+// Call on page load
+window.onload = loadProfile;
+
+</script>
+<script>
+document.getElementById('resumeForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const formData = new FormData();
+  const fileInput = document.getElementById('resumeUpload');
+  
+  if (!fileInput.files.length) {
+    alert("Please select a file.");
+    return;
+  }
+
+  formData.append('resume', fileInput.files[0]);
+  formData.append('email', 'pandu@example.com'); // Optional: send email or student ID for mapping
+
+  fetch('upload_resume.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.message);
+  })
+  .catch(err => {
+    alert('Resume upload failed: ' + err);
+  });
+});
+</script>
+
+</body>
+</html>

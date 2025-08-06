@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Internship Portal Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glow-wrapper {
+      padding: 5px;
+      border-radius: 20px;
+      background: linear-gradient(270deg, #00c6ff, #0072ff, #ff00cc, #00c6ff);
+      background-size: 600% 600%;
+      animation: borderGlow 10s ease infinite;
+    }
+
+    @keyframes borderGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      background-color: #111827;
+      border-radius: 15px;
+      padding: 30px 25px;
+      width: 360px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    .form-box {
+      display: none;
+    }
+
+    .form-box.active {
+      display: block;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: #1f2937;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+    }
+
+    .toggle-text {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .toggle-text a {
+      color: #00c6ff;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    @media (max-width: 420px) {
+      .container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-wrapper">
+    <div class="container">
+
+      <!-- Login Form -->
+      <form id="loginForm" class="form-box active">
+        <h2>Login</h2>
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <button type="submit">Login</button>
+        <p class="toggle-text">
+          Don't have an account? <a onclick="toggleForms('registerForm')">Register</a>
+        </p>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="form-box">
+        <h2>Register</h2>
+        <input type="text" name="fullname" placeholder="Full Name" required />
+        <input type="email" name="email" placeholder="Email" required />
+        <input type="password" name="password" placeholder="Password" required />
+        <select name="role" required>
+          <option value="">Select Role</option>
+          <option value="student">Student</option>
+          <option value="mentor">Mentor</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button type="submit">Create Account</button>
+        <p class="toggle-text">
+          Already have an account? <a onclick="toggleForms('loginForm')">Login</a>
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function toggleForms(showId) {
+      document.getElementById('loginForm').classList.remove('active');
+      document.getElementById('registerForm').classList.remove('active');
+      document.getElementById(showId).classList.add('active');
+    }
+
+    // ✅ REGISTER FORM
+    document.getElementById('registerForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      formData.append('action', 'register');
+
+      try {
+        const res = await fetch('auth.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        alert(data.message);
+
+        if (data.status === 'success') {
+          toggleForms('loginForm'); // Go to login form
+        document.getElementById('registerForm').reset();
+        }
+      } catch (err) {
+        alert("Registration failed. Please try again.");
+        console.error(err);
+      }
+    });
+
+    // ✅ LOGIN FORM
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      formData.append('action', 'login');
+
+      try {
+        const res = await fetch('auth.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        console.log(data); // Debug
+
+        if (data.status === 'success') {
+          localStorage.setItem('user', JSON.stringify(data.user));
+
+          if (data.user.role === 'student') {
+            window.location.href = 'StudentDashboard.html';
+          } else if (data.user.role === 'mentor') {
+            window.location.href = 'faculty.html';
+          } else {
+            alert("Admin access coming soon.");
+          }
+        } else {
+          alert(data.message || 'Login failed.');
+        }
+      } catch (err) {
+        alert("Login failed. Please check your network or credentials.");
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>

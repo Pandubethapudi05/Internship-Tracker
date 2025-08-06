@@ -1,0 +1,78 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8" /><title>Faculty Dashboard</title><link rel="stylesheet" href="styles.css" /></head><body><h1>Welcome, Faculty</h1><button id="logout">Logout</button><h2>Post a New Project</h2><form id="projectForm">
+  Title: <input type="text" id="title" required /><br/>
+  Domain: <input type="text" id="domain" required /><br/>
+  Duration: <input type="text" id="duration" required /><br/>
+  Stipend: <input type="text" id="stipend" required /><br/>
+  <button type="submit">Post Project</button></form>
+<h2>Your Projects</h2><div id="myProjects"></div>
+<h2>Applications for Projects</h2><div id="applications"></div>
+<script>const user = JSON.parse(localStorage.getItem('user'));
+document.getElementById('logout').onclick = () => {
+  localStorage.removeItem('user');
+  window.location='index.html';
+};
+// Post new projectdocument.getElementById('projectForm').onsubmit = e => {
+  e.preventDefault();
+  fetch('/api/projects', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      title: document.getElementById('title').value,
+      domain: document.getElementById('domain').value,
+      duration: document.getElementById('duration').value,
+      stipend: document.getElementById('stipend').value,
+      posted_by: user.id
+    })
+  }).then(res => res.json())
+    .then(() => {
+      alert('Project posted');
+      loadMyProjects();
+    });
+};
+function loadMyProjects() {
+  fetch('/api/myprojects/' + user.id)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('myProjects');
+      container.innerHTML = '';
+      data.forEach(p => {
+        const div = document.createElement('div');
+        div.innerHTML = `<b>${p.title}</b> (${p.domain})`;
+        // Load applications for this project
+        fetch('/api/applications/' + p.id)
+          .then(res => res.json())
+          .then(apps => {
+            const list = document.createElement('ul');
+            apps.forEach(a => {
+                const item = document.createElement('li');
+              item.innerHTML = `${a.name} (${a.email}) - Status: ${a.status}
+              <button onclick="updateStatus(${a.id}, 'Shortlisted')">Shortlist</button>
+              <button onclick="updateStatus(${a.id}, 'Selected')">Select</button>
+              <button onclick="updateStatus(${a.id}, 'Rejected')">Reject</button>`;
+              list.appendChild(item);
+            });
+            div.appendChild(list);
+          });
+        container.appendChild(div);
+      });
+    });
+}
+// Update application statusfunction updateStatus(id, status) {
+  fetch('/api/application/' + id, {
+    method:'PUT',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({status})
+  }).then(() => loadMyProjects());
+}
+loadMyProjects();
+  window.updateStatus = function(id, status) {
+    fetch('/api/application/' + id, {
+      method:'PUT',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body: new URLSearchParams({status})
+    }).then(() => {
+      alert(`Status updated to ${status}`);
+      loadMyProjects();
+    });
+  };
+</script></body></html>

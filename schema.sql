@@ -24,3 +24,4 @@ CREATE TABLE IF NOT EXISTS Applications (
   FOREIGN KEY(user_id) REFERENCES Users(id),
   FOREIGN KEY(project_id) REFERENCES Projects(id)
 );
+

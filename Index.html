@@ -21,13 +21,26 @@
     }
 
     .glow-wrapper {
-      padding: 5px;
-      border-radius: 20px;
-      background: linear-gradient(270deg, #00c6ff, #0072ff, #ff00cc, #00c6ff);
-      background-size: 600% 600%;
-      animation: borderGlow 10s ease infinite;
-    }
+  padding: 4px;
+  border-radius: 20px;
+  background: linear-gradient(
+    270deg,
+    #00F5A0,
+    #00D9F5,
+    #8A2BE2,
+    #FF3C3C,
+    #00F5A0
+  );
+  background-size: 600% 600%;
+  animation: borderGlow 10s ease infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
+/* Hover Pop-Up Effect */
+.glow-wrapper:hover {
+  transform: scale(1.04);
+  
+}
     @keyframes borderGlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
